@@ -31,13 +31,12 @@ int main() {
         window.draw(sim.points, nParticles, sf::Points);
         window.display();
 
-        /*
+        
         std::cout << "pos: " << sim.points[0].position.x << ", " << sim.points[0].position.y << std::endl;
         std::cout << "speed: " << sim.speed[0].x << ", " << sim.speed[0].y << std::endl;
         std::cout << "acc: " << sim.acc[0].x << ", " << sim.acc[0].y << std::endl;
         std::cout << "force: " << sim.force[0].x << ", " << sim.force[0].y << std::endl;
         std::cout << "-----" << std::endl;
-        */
     }
 
     return 0;

@@ -4,13 +4,24 @@
 #include <SFML/Graphics.hpp>
 
 #include <cstdlib>
-#include <cmath> // fmodf
+#include <cmath>
 
 const float G = 1e-6;
-const float EPS = 1e-12;
+const float FRICTION = 0.99;
+const float EPS = 1e-6;
 
 float randab(const float a, const float b) {
     return static_cast<float> (rand()) / static_cast<float> (RAND_MAX) * (b-a) + a;
+}
+
+float sign(const float x) {
+    if(x < 0) return -1;
+    if(x > 0) return 1;
+    return 0;
+}
+
+float square(const float x) {
+    return x*x;
 }
 
 class Simulation {
@@ -40,7 +51,8 @@ class Simulation {
                 );
 
                 // random speed
-                speed[i] = sf::Vector2f(randab(-1, 1), randab(-1, 1));
+                //speed[i] = sf::Vector2f(randab(-1, 1), randab(-1, 1));
+                speed[i] = sf::Vector2f();
 
                 acc[i] = sf::Vector2f(0, 0);
                 mass[i] = 1.0;
@@ -67,24 +79,26 @@ class Simulation {
             points[i].position.y = fmodf(points[i].position.y + h, h);
         }
 
+        void computeForceBetweenBodies(const int i, const int j) {
+            // the numerator of the Newton's formula
+            const float numerator = G * mass[i] * mass[j];
+
+            const float distX = points[i].position.x - points[j].position.x;
+            const float distSqX = fmaxf(square(distX), EPS);
+            const float fx = (numerator / distSqX) * FRICTION;
+            force[i].x += (fx * sign(distX));
+            force[j].x -= (fx * sign(distX));
+
+            const float distY = points[i].position.y - points[j].position.y;
+            const float distSqY = fmaxf(square(distY), EPS);
+            const float fy = (numerator / distSqY) * FRICTION;
+            force[i].y += (fy * sign(distY));
+            force[j].y -= (fy * sign(distY));
+        }
+
         void computeForceOnBody(const int i) {
             for(int j=i+1; j<n; j++) {
-                float distX = points[i].position.x - points[j].position.x;
-                distX *= distX;
-                float distY = points[i].position.y - points[j].position.y;
-                distY *= distY;
-
-                distX = fmaxf(distX, EPS);
-                distY = fmaxf(distY, EPS);
-
-                const float fx = G * mass[i] * mass[j] / distX;
-                const float fy = G * mass[i] * mass[j] / distY;
-
-                force[i].x += -fx;
-                force[j].x += -fx;
-
-                force[i].y += -fy;
-                force[j].y += -fy;
+                computeForceBetweenBodies(i, j);
             }
         }
 
