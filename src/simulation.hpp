@@ -6,9 +6,10 @@
 #include <cstdlib>
 #include <cmath>
 
-const float G = 1e-6;
+const float G = 1e-12;
 const float FRICTION = 0.99;
-const float EPS = 1e-6;
+const float DT = 1e-6;
+//const float EPS = 1e-6; // TODO remove if unused
 
 float randab(const float a, const float b) {
     return static_cast<float> (rand()) / static_cast<float> (RAND_MAX) * (b-a) + a;
@@ -84,13 +85,15 @@ class Simulation {
             const float numerator = G * mass[i] * mass[j];
 
             const float distX = points[i].position.x - points[j].position.x;
-            const float distSqX = fmaxf(square(distX), EPS);
+            //const float distSqX = fmaxf(square(distX), EPS);
+            const float distSqX = square(distX);
             const float fx = (numerator / distSqX) * FRICTION;
             force[i].x += (fx * sign(distX));
             force[j].x -= (fx * sign(distX));
 
             const float distY = points[i].position.y - points[j].position.y;
-            const float distSqY = fmaxf(square(distY), EPS);
+            //const float distSqY = fmaxf(square(distY), EPS);
+            const float distSqY = square(distY);
             const float fy = (numerator / distSqY) * FRICTION;
             force[i].y += (fy * sign(distY));
             force[j].y -= (fy * sign(distY));
