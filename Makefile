@@ -14,5 +14,8 @@ check:
 run:
 	./out/main
 
+todo:
+	find . | grep .py$$ | grep -rnw . -e TODO
+
 clean:
 	rm out/*
