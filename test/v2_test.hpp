@@ -155,6 +155,20 @@ MU_TEST(star_slash) {
     mu_assert_double_eq(r.y, 1);
 }
 
+MU_TEST(plus_equal) {
+    V2 v = V2();
+    v += V2(1, 2);
+    mu_assert_double_eq(v.x, 1);
+    mu_assert_double_eq(v.y, 2);
+}
+
+MU_TEST(minus_equal) {
+    V2 v = V2();
+    v -= V2(1, 2);
+    mu_assert_double_eq(v.x, -1);
+    mu_assert_double_eq(v.y, -2);
+}
+
 MU_TEST_SUITE(v2_test) {
 	MU_SUITE_CONFIGURE(NULL, NULL);
 
@@ -182,6 +196,8 @@ MU_TEST_SUITE(v2_test) {
     MU_RUN_TEST(star_operator);
     MU_RUN_TEST(slash_operator);
     MU_RUN_TEST(star_slash);
+    MU_RUN_TEST(plus_equal);
+    MU_RUN_TEST(minus_equal);
 }
 
 #endif // V2_TEST_HPP

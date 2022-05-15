@@ -48,6 +48,33 @@ class V2 {
         double dist(V2 other) {
             return sub(other).mod(); // can be optimized without calling sub (because it creates a new temporary V2)
         }
+
+        // overloaded operators
+        V2 operator+(V2 other) {
+            return add(other);
+        }
+
+        V2 operator-(V2 other) {
+            return sub(other);
+        }
+
+        V2 operator*(const double k) {
+            return mul(k);
+        }
+
+        V2 operator/(const double k) {
+            return div(k);
+        }
+
+        void operator+=(V2 other) {
+            x += other.x;
+            y += other.y;
+        }
+
+        void operator-=(V2 other) {
+            x -= other.x;
+            y -= other.y;
+        }
 };
 
 #endif // V2_HPP

@@ -18,6 +18,7 @@ int main() {
 
     Simulation sim(nParticles, width, height);
 
+    int i = 0;
     while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event)) {
@@ -27,16 +28,21 @@ int main() {
 
         sim.update();
 
-        window.clear();
-        window.draw(sim.points, nParticles, sf::Points);
+        window.clear(sf::Color(255, 255, 255, 255));
+        sim.render(&window);
         window.display();
 
-        
+        /*
         std::cout << "pos: " << sim.points[0].position.x << ", " << sim.points[0].position.y << std::endl;
         std::cout << "speed: " << sim.speed[0].x << ", " << sim.speed[0].y << std::endl;
         std::cout << "acc: " << sim.acc[0].x << ", " << sim.acc[0].y << std::endl;
         std::cout << "force: " << sim.force[0].x << ", " << sim.force[0].y << std::endl;
-        std::cout << "-----" << std::endl;
+        std::cout << "-----" << std::endl;*/
+
+        i++;
+        if(i%1000 == 0) {
+            printf("%d iterations done\n", i);
+        }
     }
 
     return 0;

@@ -19,8 +19,8 @@ MU_TEST(two_bodies) {
     const float left = 20;
     const float right = 30;
 
-    sf::Vertex *first = &sim.points[0];
-    sf::Vertex *second = &sim.points[1];
+    Body *first = &sim.bodies[0];
+    Body *second = &sim.bodies[1];
 
     first->position.x = left;
     second->position.x = right;
@@ -45,10 +45,26 @@ MU_TEST(two_bodies) {
     mu_check(second->position.y < up);
 }
 
+MU_TEST(can_detect_collisions) {
+    Simulation sim = Simulation(100, 100);
+    sim.addBody(Body(V2(0,0), V2(0,0), 1, 1));
+    sim.addBody(Body(V2(0.5,0.5), V2(0,0), 1, 1));
+    mu_check(sim.detectCollisions());
+}
+
+MU_TEST(no_collisions) {
+    Simulation sim = Simulation(100, 100);
+    sim.addBody(Body(V2(0,0), V2(0,0), 1, 1));
+    sim.addBody(Body(V2(1,1), V2(0,0), 1, 1));
+    mu_check(sim.detectCollisions());
+}
+
 MU_TEST_SUITE(simulation_test) {
 	MU_SUITE_CONFIGURE(NULL, NULL);
 
 	MU_RUN_TEST(two_bodies);
+    MU_RUN_TEST(can_detect_collisions);
+    MU_RUN_TEST(no_collisions);
 }
 
 #endif // SIMULATION_TEST_HPP
