@@ -30,9 +30,9 @@ MU_TEST(simple_sub) {
 MU_TEST(add_sub) {
     V2 v = V2();
     V2 w = V2(1, 1);
-    v.add(w).sub(w);
-    mu_assert_double_eq(v.x, 0);
-    mu_assert_double_eq(v.y, 0);
+    V2 r = v.add(w).sub(w);
+    mu_assert_double_eq(r.x, 0);
+    mu_assert_double_eq(r.y, 0);
 }
 
 MU_TEST(simple_mul) {
@@ -51,9 +51,9 @@ MU_TEST(simple_div) {
 
 MU_TEST(mul_div) {
     V2 v = V2(1, 1);
-    v.mul(2).div(2);
-    mu_assert_double_eq(v.x, 1);
-    mu_assert_double_eq(v.y, 1);
+    V2 r = v.mul(2).div(2);
+    mu_assert_double_eq(r.x, 1);
+    mu_assert_double_eq(r.y, 1);
 }
 
 MU_TEST(modulo_of_origin_is_zero) {
@@ -110,6 +110,51 @@ MU_TEST(distance_two_points) {
     mu_assert_double_eq(w.dist(v), 1);
 }
 
+MU_TEST(plus_operator) {
+    V2 v = V2();
+    V2 w = V2(1, 1);
+    V2 r = v + w;
+    mu_assert_double_eq(r.x, w.x);
+    mu_assert_double_eq(r.y, w.y);
+}
+
+MU_TEST(minus_operator) {
+    V2 v = V2();
+    V2 w = V2(1, 1);
+    V2 r = v - w;
+    mu_assert_double_eq(r.x, -w.x);
+    mu_assert_double_eq(r.y, -w.y);
+}
+
+MU_TEST(plus_minus) {
+    V2 v = V2();
+    V2 w = V2(1, 1);
+    V2 r = v + w - w;
+    mu_assert_double_eq(r.x, 0);
+    mu_assert_double_eq(r.y, 0);
+}
+
+MU_TEST(star_operator) {
+    V2 v = V2(1, 2);
+    V2 r = v * 2;
+    mu_assert_double_eq(r.x, 2);
+    mu_assert_double_eq(r.y, 4);
+}
+
+MU_TEST(slash_operator) {
+    V2 v = V2(2, 4);
+    V2 r = v / 2;
+    mu_assert_double_eq(r.x, 1);
+    mu_assert_double_eq(r.y, 2);
+}
+
+MU_TEST(star_slash) {
+    V2 v = V2(1, 1);
+    V2 r = v * 2 / 2;
+    mu_assert_double_eq(r.x, 1);
+    mu_assert_double_eq(r.y, 1);
+}
+
 MU_TEST_SUITE(v2_test) {
 	MU_SUITE_CONFIGURE(NULL, NULL);
 
@@ -129,6 +174,14 @@ MU_TEST_SUITE(v2_test) {
     MU_RUN_TEST(normalized_vector_modulo_is_one);
     MU_RUN_TEST(distance_from_origin_is_vector_modulo);
     MU_RUN_TEST(distance_two_points);
+
+    // operator
+    MU_RUN_TEST(plus_operator);
+    MU_RUN_TEST(minus_operator);
+    MU_RUN_TEST(plus_minus);
+    MU_RUN_TEST(star_operator);
+    MU_RUN_TEST(slash_operator);
+    MU_RUN_TEST(star_slash);
 }
 
 #endif // V2_TEST_HPP

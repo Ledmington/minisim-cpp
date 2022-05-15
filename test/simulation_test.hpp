@@ -32,10 +32,12 @@ MU_TEST(two_bodies) {
         sim.update();
     }
 
+    /*
     printf("%.10f, %.10f\n", first->position.x, first->position.y);
     printf("%.10f, %.10f\n", sim.speed[0].x, sim.speed[0].y);
     printf("%.10f, %.10f\n", sim.acc[0].x, sim.acc[0].y);
     printf("%.10f, %.10f\n", sim.force[0].x, sim.force[0].x);
+    */
 
     mu_check(first->position.x > left);
     mu_check(second->position.x < right);
