@@ -1,6 +1,7 @@
 #ifndef BODY_HPP
 #define BODY_HPP
 
+#include <cmath>
 #include <SFML/Graphics.hpp>
 
 #include "v2.hpp"
@@ -26,6 +27,13 @@ class Body {
 
         double dist(Body *other) {
             return position.dist(other->position);
+        }
+
+        bool collidesWith(Body *other) {
+            const double Rsum = radius + other->radius;
+            if(fabs(position.x - other->position.x) > Rsum) return false;
+            if(fabs(position.y - other->position.y) > Rsum) return false;
+            return dist(other) < radius + other->radius;
         }
 };
 

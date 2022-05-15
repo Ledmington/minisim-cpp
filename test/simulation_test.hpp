@@ -49,14 +49,14 @@ MU_TEST(can_detect_collisions) {
     Simulation sim = Simulation(100, 100);
     sim.addBody(Body(V2(0,0), V2(0,0), 1, 1));
     sim.addBody(Body(V2(0.5,0.5), V2(0,0), 1, 1));
-    mu_check(sim.detectCollisions());
+    mu_check(sim.detectAndResolveCollisions());
 }
 
 MU_TEST(no_collisions) {
     Simulation sim = Simulation(100, 100);
     sim.addBody(Body(V2(0,0), V2(0,0), 1, 1));
     sim.addBody(Body(V2(1,1), V2(0,0), 1, 1));
-    mu_check(sim.detectCollisions());
+    mu_check(sim.detectAndResolveCollisions());
 }
 
 MU_TEST_SUITE(simulation_test) {

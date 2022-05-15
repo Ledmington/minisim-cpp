@@ -142,28 +142,31 @@ class Simulation {
             }
         }
 
-        bool detectCollisions() {
+        /*
+            Returns true if it has found some collisions.
+            False otherwise.
+        */
+        bool detectAndResolveCollisions() {
+            bool foundCollisions = false;
             const unsigned int n = bodies.size();
             for(unsigned int i=0; i<n; i++) {
                 Body *first = &bodies[i];
                 for(unsigned int j=i+1; j<n; j++) {
                     Body *second = &bodies[j];
-                    if(first->dist(second) < first->radius + second->radius) {
-                        return true;
+
+                    if(first->collidesWith(second)) {
+                        // we have found a collision
+                        foundCollisions = true;
+                        
                     }
                 }
             }
-            return false;
-        }
-
-        void resolveCollisions() {
-
+            return foundCollisions;
         }
 
         void update() {
-            while(detectCollisions()) {
-                resolveCollisions();
-            }
+            // TODO may be simplified to do just k iterations of "detect-and-resolve"
+            while(detectAndResolveCollisions()) {}
 
             // compute forces
             for(unsigned int i=0; i<bodies.size(); i++) {
