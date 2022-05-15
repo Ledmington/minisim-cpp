@@ -49,6 +49,11 @@ class V2 {
             return sub(other).mod(); // can be optimized without calling sub (because it creates a new temporary V2)
         }
 
+        double distsq(V2 other) {
+            V2 diff = sub(other);
+            return diff.x*diff.x + diff.y*diff.y;
+        }
+
         // overloaded operators
         V2 operator+(V2 other) {
             return add(other);

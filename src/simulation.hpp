@@ -157,7 +157,41 @@ class Simulation {
                     if(first->collidesWith(second)) {
                         // we have found a collision
                         foundCollisions = true;
-                        
+
+                        // vector pointing first (but centered in origin)
+                        V2 diff = first->position.sub(second->position);
+                        V2 spos = diff.norm();
+
+                        /*
+                            Computing the magnitude of the movementas the result of this system.
+                            R1 = a + b;
+                            R2 = b + c;
+                            compenetration = a + b + c
+
+                            we want to find b because it represents the distance to be covered in order
+                            to avoid the collision.
+                            If b was zero, we would have no collisions.
+                            b can be as high as min(R1, R2).
+
+                            The resulting formula is
+                            b = R2 - compenetration - R1
+                              = (b+c) - (a+b+c) - (a+b)
+                        */
+                       const double compenetration = diff.mod();
+                       const double b = second->radius - compenetration - first->radius;
+
+                       first->position += spos * (b/2);
+                       second->position -= spos * (b/2);
+
+                        /*
+                        const double distsq = diff.dot(diff);
+                        const double Rsum = first->radius + second->radius;
+                        if (distsq < Rsum*Rsum - EPS) {
+                            const double dist = sqrt(distsq);
+                            const Vec3 force = vmul(vmul(diff, 1/dist), (Rsum - dist)*KAPPA);
+                            s->F = vsub(s->F, force);
+                            other->F = vadd(other->F, force);
+                        }*/
                     }
                 }
             }
@@ -166,7 +200,10 @@ class Simulation {
 
         void update() {
             // TODO may be simplified to do just k iterations of "detect-and-resolve"
-            while(detectAndResolveCollisions()) {}
+            //while(detectAndResolveCollisions()) {}
+            for(int i=0; i<1; i++) {
+                detectAndResolveCollisions();
+            }
 
             // compute forces
             for(unsigned int i=0; i<bodies.size(); i++) {

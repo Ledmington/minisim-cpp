@@ -33,7 +33,8 @@ class Body {
             const double Rsum = radius + other->radius;
             if(fabs(position.x - other->position.x) > Rsum) return false;
             if(fabs(position.y - other->position.y) > Rsum) return false;
-            return dist(other) < radius + other->radius;
+            return position.distsq(other->position) < Rsum*Rsum; // faster way (maybe)
+            //return dist(other) < Rsum; <-- correct way
         }
 };
 
