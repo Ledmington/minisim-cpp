@@ -1,11 +1,12 @@
 CC=g++
 CFLAGS=-Wall -Werror -Wpedantic
+OPT=-O3
 SFML=-lsfml-graphics -lsfml-window -lsfml-system
 
 default: clean build check
 
 build:
-	${CC} ${CFLAGS} src/*.cpp -o out/main ${SFML}
+	${CC} ${CFLAGS} ${OPT} src/*.cpp -o out/main ${SFML}
 	${CC} ${CFLAGS} test/*.cpp -o out/test ${SFML}
 
 check:
