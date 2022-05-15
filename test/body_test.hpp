@@ -17,14 +17,14 @@ MU_TEST(default_body) {
 
 MU_TEST(two_body_collision) {
     Body a = Body(V2(0,0), V2(0,0), 1, 1);
-    Body b = Body(V2(0.5,0.5), V2(0,0), 1, 1);
+    Body b = Body(V2(1,1), V2(0,0), 1, 1);
     mu_check(a.collidesWith(&b));
 }
 
 MU_TEST(two_body_no_collision) {
     Body a = Body(V2(0,0), V2(0,0), 1, 1);
-    Body b = Body(V2(1,1), V2(0,0), 1, 1);
-    mu_check(a.collidesWith(&b));
+    Body b = Body(V2(2,2), V2(0,0), 1, 1);
+    mu_check(!a.collidesWith(&b));
 }
 
 MU_TEST_SUITE(body_test) {

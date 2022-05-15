@@ -48,15 +48,25 @@ MU_TEST(two_bodies) {
 MU_TEST(can_detect_collisions) {
     Simulation sim = Simulation(100, 100);
     sim.addBody(Body(V2(0,0), V2(0,0), 1, 1));
-    sim.addBody(Body(V2(0.5,0.5), V2(0,0), 1, 1));
+    sim.addBody(Body(V2(1,1), V2(0,0), 1, 1));
     mu_check(sim.detectAndResolveCollisions());
 }
 
 MU_TEST(no_collisions) {
     Simulation sim = Simulation(100, 100);
     sim.addBody(Body(V2(0,0), V2(0,0), 1, 1));
-    sim.addBody(Body(V2(1,1), V2(0,0), 1, 1));
+    sim.addBody(Body(V2(2,2), V2(0,0), 1, 1));
+    mu_check(!sim.detectAndResolveCollisions());
+}
+
+MU_TEST(can_resolve_collisions) {
+    Simulation sim = Simulation(100, 100);
+    sim.addBody(Body(V2(0,0), V2(0,0), 1, 1));
+    sim.addBody(Body(V2(1,0), V2(0,0), 1, 1));
     mu_check(sim.detectAndResolveCollisions());
+    mu_check(!sim.detectAndResolveCollisions());
+    mu_check(sim.bodies[0].position.x < 0);
+    mu_check(sim.bodies[0].position.x > 1);
 }
 
 MU_TEST_SUITE(simulation_test) {
@@ -65,6 +75,7 @@ MU_TEST_SUITE(simulation_test) {
 	MU_RUN_TEST(two_bodies);
     MU_RUN_TEST(can_detect_collisions);
     MU_RUN_TEST(no_collisions);
+    MU_RUN_TEST(can_resolve_collisions);
 }
 
 #endif // SIMULATION_TEST_HPP

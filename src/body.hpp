@@ -21,9 +21,15 @@ class Body {
             assert(radius > 0);
             circle = sf::CircleShape(radius);
             circle.setFillColor(sf::Color::Red);
+            this->mass = mass;
+            this->radius = radius;
+            this->position = pos;
+            this->speed = speed;
+            this->acc = V2(0, 0);
+            this->force = V2(0, 0);
         }
 
-        Body() : Body(V2(0,0), V2(0,0), 1, 1) {}
+        Body() : Body(V2(0,0), V2(0,0), 1.0, 1.0) {}
 
         double dist(Body *other) {
             return position.dist(other->position);

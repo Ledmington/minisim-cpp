@@ -16,7 +16,7 @@ run:
 	./out/main
 
 todo:
-	find . | grep .py$$ | grep -rnw . -e TODO
+	find . | grep .*pp$$ | grep -rnw . -e TODO
 
 clean:
 	rm out/*
