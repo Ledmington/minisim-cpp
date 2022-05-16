@@ -16,7 +16,7 @@ class Borders {
             this->h = height;
         }
 
-        virtual void apply(Body *b)=0;
+        virtual void apply(Body *b) = 0;
 };
 
 class CyclicBorders : public Borders {

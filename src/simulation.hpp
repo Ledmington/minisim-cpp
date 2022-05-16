@@ -7,6 +7,7 @@
 #include <cmath>
 #include <cassert>
 #include <vector>
+#include <iostream>
 
 #include "body.hpp"
 #include "borders.hpp"
@@ -65,7 +66,7 @@ class Simulation {
             b->position += b->speed;
             
             b->force = V2(0, 0);
-            
+            std::cout << "applying borders" << std::endl;
             bounds->apply(b);
         }
 
@@ -175,14 +176,17 @@ class Simulation {
             // TODO may be simplified to do just k iterations of "detect-and-resolve"
             //while(detectAndResolveCollisions()) {}
             for(int i=0; i<1; i++) {
+                std::cout << "collision iteration " << i << std::endl;
                 detectAndResolveCollisions();
             }
 
+            std::cout << "computeForces" << std::endl;
             // compute forces
             for(unsigned int i=0; i<bodies.size(); i++) {
                 computeForceOnBody(i);
             }
 
+            std::cout << "applyForces" << std::endl;
             // apply forces
             for(unsigned int i=0; i<bodies.size(); i++) {
                 update_point(i);
