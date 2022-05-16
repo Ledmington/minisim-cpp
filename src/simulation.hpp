@@ -9,6 +9,7 @@
 #include <vector>
 
 #include "body.hpp"
+#include "borders.hpp"
 
 const double G = 1e-5;
 const double FRICTION = 0.9;
@@ -32,17 +33,15 @@ double square(const double x) {
 class Simulation {
     public:
 
-        double w;
-        double h;
         std::vector<Body> bodies = std::vector<Body>();
+        Borders *bounds;
 
-        Simulation(const int n, const double width, const double height) : w{width}, h{height} {
+        Simulation(const int n, Borders *b) {
             assert(n >= 0);
-            assert(width > 0);
-            assert(height > 0);
+            bounds = b;
             for(int i=0; i<n; i++) {
                 Body b = Body(
-                    V2(randab(0, w), randab(0, h)),
+                    V2(randab(0, bounds->w), randab(0, bounds->h)),
                     V2(0, 0),
                     1,
                     10
@@ -52,36 +51,11 @@ class Simulation {
         }
 
         // Creates an empty simulation
-        Simulation(const double width, const double height) : Simulation(0, width, height) {}
+        Simulation(Borders *bounds) : Simulation(0, bounds) {}
 
         Simulation addBody(Body b) {
             bodies.push_back(b);
             return *this;
-        }
-
-        // TODO maybe refactor in a separate class/method
-        void cyclic_domain(Body *b) {
-            b->position.x = fmodf(b->position.x + w, w);
-            b->position.y = fmodf(b->position.y + h, h);
-        }
-
-        // TODO maybe refactor in a separate class/method
-        void solid_borders(Body *b) {
-            if(b->position.x < 0) {
-                b->position.x = 0;
-                b->speed.x *= -1;
-            } else if(b->position.x > w) {
-                b->position.x = w;
-                b->speed.x *= -1;
-            }
-
-            if(b->position.y < 0) {
-                b->position.y = 0;
-                b->speed.y *= -1;
-            } else if(b->position.y > h) {
-                b->position.y = h;
-                b->speed.y *= -1;
-            }
         }
 
         void update_point(const int i) {
@@ -92,8 +66,7 @@ class Simulation {
             
             b->force = V2(0, 0);
             
-            //cyclic_domain(b);
-            solid_borders(b);
+            bounds->apply(b);
         }
 
         void computeForceBetweenBodies(const int i, const int j) {

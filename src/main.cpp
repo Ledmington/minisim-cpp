@@ -5,9 +5,10 @@
 #include <SFML/Graphics.hpp>
 
 #include "simulation.hpp"
+#include "simulation_builder.hpp"
 
-const float width = 700;
-const float height = 700;
+const double width = 700;
+const double height = 700;
 
 const unsigned int nParticles = 10;
 
@@ -32,7 +33,12 @@ int main() {
 
     sf::RenderWindow window(sf::VideoMode(width, height), "N-bodies simulation");
 
-    Simulation sim(nParticles, width, height);
+    Simulation sim = SimulationBuilder()
+        .nBodies(nParticles)
+        .width(width)
+        .height(height)
+        .solidBorders()
+        .build();
     std::cout << "created simulation" << std::endl;
 
     int i = 0;

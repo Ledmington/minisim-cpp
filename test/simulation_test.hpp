@@ -5,12 +5,23 @@
 
 #include <SFML/Graphics.hpp>
 #include "../src/simulation.hpp"
+#include "../src/simulation_builder.hpp"
 
 #include <iostream>
 
-MU_TEST(two_bodies) {
-	Simulation sim(2, 100, 100);
+Simulation *sim;
 
+static void init() {
+    Simulation tmp = SimulationBuilder()
+        .nBodies(2)
+        .width(100)
+        .height(100)
+        .solidBorders()
+        .build();
+    sim = &tmp;
+}
+
+MU_TEST(two_bodies) {
     // the origin (0,0) is at the upper left corner
     // the x axis is placed as usual
     // the y axis points down (so to go "up", you need to decrease the y coordinate)
@@ -19,8 +30,8 @@ MU_TEST(two_bodies) {
     const float left = 20;
     const float right = 30;
 
-    Body *first = &sim.bodies[0];
-    Body *second = &sim.bodies[1];
+    Body *first = &sim->bodies[0];
+    Body *second = &sim->bodies[1];
 
     first->position.x = left;
     second->position.x = right;
@@ -29,7 +40,7 @@ MU_TEST(two_bodies) {
     second->position.y = up;
 
     for(int i=0; i<1000; i++) {
-        sim.update();
+        sim->update();
     }
 
     /*
@@ -46,31 +57,28 @@ MU_TEST(two_bodies) {
 }
 
 MU_TEST(can_detect_collisions) {
-    Simulation sim = Simulation(100, 100);
-    sim.addBody(Body(V2(0,0), V2(0,0), 1, 1));
-    sim.addBody(Body(V2(1,1), V2(0,0), 1, 1));
-    mu_check(sim.detectAndResolveCollisions());
+    sim->addBody(Body(V2(0,0), V2(0,0), 1, 1));
+    sim->addBody(Body(V2(1,1), V2(0,0), 1, 1));
+    mu_check(sim->detectAndResolveCollisions());
 }
 
 MU_TEST(no_collisions) {
-    Simulation sim = Simulation(100, 100);
-    sim.addBody(Body(V2(0,0), V2(0,0), 1, 1));
-    sim.addBody(Body(V2(2,2), V2(0,0), 1, 1));
-    mu_check(!sim.detectAndResolveCollisions());
+    sim->addBody(Body(V2(0,0), V2(0,0), 1, 1));
+    sim->addBody(Body(V2(2,2), V2(0,0), 1, 1));
+    mu_check(!sim->detectAndResolveCollisions());
 }
 
 MU_TEST(can_resolve_collisions) {
-    Simulation sim = Simulation(100, 100);
-    sim.addBody(Body(V2(0,0), V2(0,0), 1, 1));
-    sim.addBody(Body(V2(1,0), V2(0,0), 1, 1));
-    mu_check(sim.detectAndResolveCollisions());
-    mu_check(!sim.detectAndResolveCollisions());
-    mu_check(sim.bodies[0].position.x < 0);
-    mu_check(sim.bodies[0].position.x > 1);
+    sim->addBody(Body(V2(0,0), V2(0,0), 1, 1));
+    sim->addBody(Body(V2(1,0), V2(0,0), 1, 1));
+    mu_check(sim->detectAndResolveCollisions());
+    mu_check(!sim->detectAndResolveCollisions());
+    mu_check(sim->bodies[0].position.x < 0);
+    mu_check(sim->bodies[0].position.x > 1);
 }
 
 MU_TEST_SUITE(simulation_test) {
-	MU_SUITE_CONFIGURE(NULL, NULL);
+	MU_SUITE_CONFIGURE(init, NULL);
 
 	MU_RUN_TEST(two_bodies);
     MU_RUN_TEST(can_detect_collisions);
