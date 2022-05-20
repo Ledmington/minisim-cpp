@@ -6,7 +6,7 @@
 
 class SimulationBuilder {
     private:
-        int n;
+        int n = 0;
         int w;
         int h;
 
@@ -44,7 +44,7 @@ class SimulationBuilder {
             return *this;
         }
 
-        Simulation build() {
+        Simulation* build() {
             Borders *b;
             switch(borderType) {
                 case SOLID:
@@ -65,7 +65,7 @@ class SimulationBuilder {
                     break;
                 }
             }
-            return Simulation(n, b);
+            return new Simulation(n, b);
         }
 };
 
