@@ -7,6 +7,7 @@
 #include <cmath>
 #include <cassert>
 #include <vector>
+#include <iostream>
 
 #include "body.hpp"
 #include "borders.hpp"
@@ -33,7 +34,7 @@ double square(const double x) {
 class Simulation {
     public:
 
-        std::vector<Body> bodies = std::vector<Body>();
+        std::vector<Body*> bodies = std::vector<Body*>();
         Borders *bounds;
 
         Simulation(const int n, Borders *b) {
@@ -41,7 +42,7 @@ class Simulation {
             assert(b);
             bounds = b;
             for(int i=0; i<n; i++) {
-                Body b = Body(
+                Body *b = new Body(
                     V2(randab(0, bounds->w), randab(0, bounds->h)),
                     V2(0, 0),
                     1,
@@ -56,15 +57,25 @@ class Simulation {
 
         ~Simulation() {
             delete bounds;
+            for (long unsigned int i=0; i<bodies.size(); i++) {
+                delete bodies[i];
+                bodies[i] = NULL;
+            }
         }
 
-        Simulation addBody(Body b) {
+        Simulation addBody(Body *b) {
+            std::cout << "addBody" << std::endl;
+            std::cout << "size: " << bodies.size() << std::endl;
+            std::cout << b->mass << std::endl;
+            std::cout << b->radius << std::endl;
+            std::cout << b->position.x << ", " << b->position.y << std::endl;
             bodies.push_back(b);
+            std::cout << "size: " << bodies.size() << std::endl;
             return *this;
         }
 
         void update_point(const int i) {
-            Body *b = &bodies[i];
+            Body *b = bodies[i];
             b->acc = b->force / b->mass;// * DT; // TODO fix later
             b->speed += b->acc;
             b->position += b->speed;
@@ -75,37 +86,37 @@ class Simulation {
         }
 
         void computeForceBetweenBodies(const int i, const int j) {
-            const double distanceSquared = fmax(square(bodies[i].position.x - bodies[j].position.x), 1e-6);
-            const double fx = G * bodies[i].mass * bodies[j].mass / distanceSquared;
-            const double fy = 1 / fmax(square(bodies[i].position.y - bodies[j].position.y), 1e-12);
-            if(bodies[i].position.x < bodies[j].position.x) {
-                bodies[i].force.x += fx;
-                bodies[j].force.x -= fx;
+            const double distanceSquared = fmax(square(bodies[i]->position.x - bodies[j]->position.x), 1e-6);
+            const double fx = G * bodies[i]->mass * bodies[j]->mass / distanceSquared;
+            const double fy = 1 / fmax(square(bodies[i]->position.y - bodies[j]->position.y), 1e-12);
+            if(bodies[i]->position.x < bodies[j]->position.x) {
+                bodies[i]->force.x += fx;
+                bodies[j]->force.x -= fx;
             } else {
-                bodies[i].force.x -= fx;
-                bodies[j].force.x += fx;
+                bodies[i]->force.x -= fx;
+                bodies[j]->force.x += fx;
             }
 
-            if(bodies[i].position.y < bodies[j].position.y) {
-                bodies[i].force.y += fy;
-                bodies[j].force.y -= fy;
+            if(bodies[i]->position.y < bodies[j]->position.y) {
+                bodies[i]->force.y += fy;
+                bodies[j]->force.y -= fy;
             } else {
-                bodies[i].force.y -= fy;
-                bodies[j].force.y += fy;
+                bodies[i]->force.y -= fy;
+                bodies[j]->force.y += fy;
             }
 
             //printf("(%d, %d) -> fx: %e, fy: %e\n", i, j, fx, fy);
 
             /*
             // Newton's formula on x
-            const double distX = points[i].position.x - points[j].position.x;
+            const double distX = points[i]->position.x - points[j]->position.x;
             const double distSqX = fmax(square(distX), 1e-12); // TODO make 1e-12 a constant
             const double fx = (G * mass[i] * mass[j] / distSqX) * FRICTION;
             force[i].x += (fx * sign(distX));
             force[j].x -= (fx * sign(distX));
 
             // Newton's formula on y
-            const double distY = points[i].position.y - points[j].position.y;
+            const double distY = points[i]->position.y - points[j]->position.y;
             const double distSqY = fmax(square(distY), 1e-12); // TODO make 1e-12 a constant
             const double fy = (G * mass[i] * mass[j] / distSqY) * FRICTION;
             force[i].y += (fy * sign(distY));
@@ -128,9 +139,9 @@ class Simulation {
             bool foundCollisions = false;
             const unsigned int n = bodies.size();
             for(unsigned int i=0; i<n; i++) {
-                Body *first = &bodies[i];
+                Body *first = bodies[i];
                 for(unsigned int j=i+1; j<n; j++) {
-                    Body *second = &bodies[j];
+                    Body *second = bodies[j];
 
                     if(first->collidesWith(second)) {
                         // we have found a collision
@@ -196,7 +207,7 @@ class Simulation {
 
         void render(sf::RenderWindow *window) {
             for(unsigned int i=0; i<bodies.size(); i++) {
-                window->draw(bodies[i].circle);
+                window->draw(bodies[i]->circle);
             }
         }
 };

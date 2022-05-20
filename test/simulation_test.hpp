@@ -12,6 +12,7 @@
 Simulation *sim;
 
 static void init() {
+    std::cout << "init" << std::endl;
     Simulation tmp = SimulationBuilder()
         .nBodies(2)
         .width(100)
@@ -30,14 +31,13 @@ MU_TEST(two_bodies) {
     const float left = 20;
     const float right = 30;
 
-    Body *first = &sim->bodies[0];
-    Body *second = &sim->bodies[1];
+    std::cout << "Creating bodies" << std::endl;
+    Body *first = new Body(V2(left, down), V2(0, 0), 1, 1);
+    Body *second = new Body(V2(right, up), V2(0, 0), 1, 1);
 
-    first->position.x = left;
-    second->position.x = right;
-
-    first->position.y = down;
-    second->position.y = up;
+    sim->addBody(first);
+    std::cout << "second" << std::endl;
+    sim->addBody(second);
 
     for(int i=0; i<1000; i++) {
         sim->update();
@@ -54,27 +54,30 @@ MU_TEST(two_bodies) {
     mu_check(second->position.x < right);
     mu_check(first->position.y > down);
     mu_check(second->position.y < up);
+
+    delete(first);
+    delete(second);
 }
 
 MU_TEST(can_detect_collisions) {
-    sim->addBody(Body(V2(0,0), V2(0,0), 1, 1));
-    sim->addBody(Body(V2(1,1), V2(0,0), 1, 1));
+    sim->addBody(new Body(V2(0,0), V2(0,0), 1, 1));
+    sim->addBody(new Body(V2(1,1), V2(0,0), 1, 1));
     mu_check(sim->detectAndResolveCollisions());
 }
 
 MU_TEST(no_collisions) {
-    sim->addBody(Body(V2(0,0), V2(0,0), 1, 1));
-    sim->addBody(Body(V2(2,2), V2(0,0), 1, 1));
+    sim->addBody(new Body(V2(0,0), V2(0,0), 1, 1));
+    sim->addBody(new Body(V2(2,2), V2(0,0), 1, 1));
     mu_check(!sim->detectAndResolveCollisions());
 }
 
 MU_TEST(can_resolve_collisions) {
-    sim->addBody(Body(V2(0,0), V2(0,0), 1, 1));
-    sim->addBody(Body(V2(1,0), V2(0,0), 1, 1));
+    sim->addBody(new Body(V2(0,0), V2(0,0), 1, 1));
+    sim->addBody(new Body(V2(1,0), V2(0,0), 1, 1));
     mu_check(sim->detectAndResolveCollisions());
     mu_check(!sim->detectAndResolveCollisions());
-    mu_check(sim->bodies[0].position.x < 0);
-    mu_check(sim->bodies[0].position.x > 1);
+    mu_check(sim->bodies[0]->position.x < 0);
+    mu_check(sim->bodies[1]->position.x > 1);
 }
 
 MU_TEST_SUITE(simulation_test) {
