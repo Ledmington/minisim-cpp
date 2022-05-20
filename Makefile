@@ -1,6 +1,6 @@
 CC=g++
 CFLAGS=-Wall -Werror -Wpedantic
-OPT=-O3
+OPT=-Ofast
 SFML=-lsfml-graphics -lsfml-window -lsfml-system
 
 default: clean build check
