@@ -33,12 +33,12 @@ int main(void) {
 
     sf::RenderWindow window(sf::VideoMode(width, height), "N-bodies simulation");
 
-    Simulation sim = SimulationBuilder()
+    Simulation sim = *(SimulationBuilder()
         .nBodies(nParticles)
         .width(width)
         .height(height)
         .solidBorders()
-        .build();
+        .build());
     std::cout << "created simulation" << std::endl;
 
     int i = 0;

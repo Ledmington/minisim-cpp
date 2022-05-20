@@ -31,6 +31,8 @@ class Body {
 
         Body() : Body(V2(0,0), V2(0,0), 1.0, 1.0) {}
 
+        ~Body() {}
+
         double dist(Body *other) {
             return position.dist(other->position);
         }

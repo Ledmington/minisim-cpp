@@ -13,13 +13,15 @@ Simulation *sim;
 
 static void init() {
     std::cout << "init" << std::endl;
-    Simulation tmp = SimulationBuilder()
-        .nBodies(2)
+    sim = SimulationBuilder()
         .width(100)
         .height(100)
         .solidBorders()
         .build();
-    sim = &tmp;
+}
+
+static void end() {
+    delete sim;
 }
 
 MU_TEST(two_bodies) {
@@ -54,9 +56,6 @@ MU_TEST(two_bodies) {
     mu_check(second->position.x < right);
     mu_check(first->position.y > down);
     mu_check(second->position.y < up);
-
-    delete(first);
-    delete(second);
 }
 
 MU_TEST(can_detect_collisions) {
@@ -81,7 +80,7 @@ MU_TEST(can_resolve_collisions) {
 }
 
 MU_TEST_SUITE(simulation_test) {
-	MU_SUITE_CONFIGURE(init, NULL);
+	MU_SUITE_CONFIGURE(init, end);
 
 	MU_RUN_TEST(two_bodies);
     MU_RUN_TEST(can_detect_collisions);
