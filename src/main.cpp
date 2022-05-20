@@ -28,7 +28,7 @@ void log(std::string msg) {
     std::cout << "[" << currentDateTime() << "]: " << msg << std::endl;
 }
 
-int main() {
+int main(void) {
     srand(time(NULL));
 
     sf::RenderWindow window(sf::VideoMode(width, height), "N-bodies simulation");

@@ -97,7 +97,10 @@ static void (*minunit_teardown)(void) = NULL;
 
 /*  Run test suite and unset setup and teardown functions */
 #define MU_RUN_SUITE(suite_name) MU__SAFE_BLOCK(\
+	const char *name = #suite_name;\
+	printf("%s\n", name);\
 	suite_name();\
+	printf("\n");\
 	minunit_setup = NULL;\
 	minunit_teardown = NULL;\
 )
@@ -116,6 +119,8 @@ static void (*minunit_teardown)(void) = NULL;
 	}\
 	if (minunit_setup) (*minunit_setup)();\
 	minunit_status = 0;\
+	const char *name = #test;\
+	printf("\t%s", name);\
 	test();\
 	minunit_run++;\
 	if (minunit_status) {\
@@ -123,6 +128,7 @@ static void (*minunit_teardown)(void) = NULL;
 		printf("F");\
 		printf("\n%s\n", minunit_last_message);\
 	}\
+	printf("\n");\
 	fflush(stdout);\
 	if (minunit_teardown) (*minunit_teardown)();\
 )
