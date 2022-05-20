@@ -1,0 +1,23 @@
+name: minisim test
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+      - main
+
+jobs:
+  full-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup gcc
+        run: apt update && apt upgrade -y && apt install gcc make -y
+
+      - name: Build
+        run: make build
+
+      - name: Run checks
+        run: make check
