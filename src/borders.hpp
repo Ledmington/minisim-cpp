@@ -16,12 +16,15 @@ class Borders {
             this->h = height;
         }
 
-        virtual void apply(Body *b) = 0;
+        virtual ~Borders() {}
+
+        virtual void apply(Body *b) {}
 };
 
 class CyclicBorders : public Borders {
     public:
         CyclicBorders(const double w, const double h) : Borders(w, h) {}
+        ~CyclicBorders() {}
 
         void apply(Body *b) {
             b->position.x = fmodf(b->position.x + w, w);
@@ -32,8 +35,9 @@ class CyclicBorders : public Borders {
 class SolidBorders : public Borders {
     public:
         SolidBorders(const double w, const double h) : Borders(w, h) {}
+        ~SolidBorders() {}
 
-        void apply(Body *b) {
+        void apply(Body *b) override {
             if(b->position.x < 0) {
                 b->position.x = 0;
                 b->speed.x *= -1;

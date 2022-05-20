@@ -45,21 +45,27 @@ class SimulationBuilder {
         }
 
         Simulation build() {
+            Borders *b;
             switch(borderType) {
                 case SOLID:
                 {
-                    SolidBorders b = SolidBorders(w, h);
-                    Borders& bounds = b;
-                    return Simulation(n, &bounds);
+                    SolidBorders *sb = new SolidBorders(w, h);
+                    b = sb;
+                    break;
                 }
                 case CYCLIC:
                 {
-                    CyclicBorders b = CyclicBorders(w, h);
-                    Borders& bounds = b;
-                    return Simulation(n, &bounds);
+                    CyclicBorders *cb = new CyclicBorders(w, h);
+                    b = cb;
+                    break;
+                }
+                default:
+                {
+                    b = NULL;
+                    break;
                 }
             }
-            return NULL;
+            return Simulation(n, b);
         }
 };
 
