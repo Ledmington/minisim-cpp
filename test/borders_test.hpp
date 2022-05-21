@@ -16,6 +16,7 @@
     )
 
 #define test_template_solid(initial, must_be) test_template(initial, must_be, SolidBorders)
+#define test_template_cyclic(initial, must_be) test_template(initial, must_be, CyclicBorders)
 
 MU_TEST(no_changes_if_inside_solid) {
     test_template_solid(V2(1, 1), V2(1, 1));
@@ -45,6 +46,34 @@ MU_TEST(top_left_corner_solid) {
     test_template_solid(V2(-1, -1), V2(0, 0));
 }
 
+MU_TEST(no_changes_if_inside_cyclic) {
+    test_template_cyclic(V2(1, 1), V2(1, 1));
+}
+
+MU_TEST(out_on_right_cyclic) {
+    test_template_cyclic(V2(11, 1), V2(1, 1));
+}
+
+MU_TEST(out_on_left_cyclic) {
+    test_template_cyclic(V2(-1, 1), V2(9, 1));
+}
+
+MU_TEST(out_on_top_cyclic) {
+    test_template_cyclic(V2(1, -1), V2(1, 9));
+}
+
+MU_TEST(out_on_bottom_cyclic) {
+    test_template_cyclic(V2(1, 11), V2(1, 1));
+}
+
+MU_TEST(bottom_right_corner_cyclic) {
+    test_template_cyclic(V2(11, 11), V2(1, 1));
+}
+
+MU_TEST(top_left_corner_cyclic) {
+    test_template_cyclic(V2(-1, -1), V2(9, 9));
+}
+
 MU_TEST_SUITE(borders_test) {
     MU_SUITE_CONFIGURE(NULL, NULL);
 
@@ -55,6 +84,14 @@ MU_TEST_SUITE(borders_test) {
     MU_RUN_TEST(out_on_bottom_solid);
     MU_RUN_TEST(bottom_right_corner_solid);
     MU_RUN_TEST(top_left_corner_solid);
+
+    MU_RUN_TEST(no_changes_if_inside_cyclic);
+    MU_RUN_TEST(out_on_right_cyclic);
+    MU_RUN_TEST(out_on_left_cyclic);
+    MU_RUN_TEST(out_on_top_cyclic);
+    MU_RUN_TEST(out_on_bottom_cyclic);
+    MU_RUN_TEST(bottom_right_corner_cyclic);
+    MU_RUN_TEST(top_left_corner_cyclic);
 }
 
 #endif // BORDERS_TEST_HPP
