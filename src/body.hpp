@@ -21,6 +21,7 @@ class Body {
             assert(radius > 0);
             circle = sf::CircleShape(radius);
             circle.setFillColor(sf::Color::Red);
+            circle.setRadius(radius);
             this->mass = mass;
             this->radius = radius;
             this->position = pos;

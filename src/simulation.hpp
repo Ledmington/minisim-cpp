@@ -207,6 +207,7 @@ class Simulation {
 
         void render(sf::RenderWindow *window) {
             for(unsigned int i=0; i<bodies.size(); i++) {
+                bodies[i]->circle.setPosition(bodies[i]->position.x, bodies[i]->position.y);
                 window->draw(bodies[i]->circle);
             }
         }
