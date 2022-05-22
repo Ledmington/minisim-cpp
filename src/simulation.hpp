@@ -43,7 +43,8 @@ class Simulation {
             bounds = b;
             for(int i=0; i<n; i++) {
                 Body *b = new Body(
-                    V2(randab(0, bounds->w), randab(0, bounds->h)),
+                    //V2(randab(0, bounds->w), randab(0, bounds->h)),
+                    V2(randab(bounds->w*0.4, bounds->w*0.6), randab(bounds->h*0.4, bounds->h*0.6)),
                     V2(0, 0),
                     1,
                     1
@@ -78,9 +79,8 @@ class Simulation {
         }
 
         void computeForceBetweenBodies(const int i, const int j) {
-            const double distanceSquared = fmax(square(bodies[i]->position.x - bodies[j]->position.x), 1e-6);
-            const double fx = gravitational_constant * bodies[i]->mass * bodies[j]->mass / distanceSquared;
-            const double fy = 1 / fmax(square(bodies[i]->position.y - bodies[j]->position.y), 1e-12);
+            const double distanceXSquared = fmax(square(bodies[i]->position.x - bodies[j]->position.x), 1e-6);
+            const double fx = friction_constant * gravitational_constant * bodies[i]->mass * bodies[j]->mass / distanceXSquared;
             if(bodies[i]->position.x < bodies[j]->position.x) {
                 bodies[i]->force.x += fx;
                 bodies[j]->force.x -= fx;
@@ -89,6 +89,8 @@ class Simulation {
                 bodies[j]->force.x += fx;
             }
 
+            const double distanceYSquared = fmax(square(bodies[i]->position.y - bodies[j]->position.y), 1e-6);
+            const double fy = friction_constant * gravitational_constant * bodies[i]->mass * bodies[j]->mass / distanceYSquared;
             if(bodies[i]->position.y < bodies[j]->position.y) {
                 bodies[i]->force.y += fy;
                 bodies[j]->force.y -= fy;
@@ -96,24 +98,6 @@ class Simulation {
                 bodies[i]->force.y -= fy;
                 bodies[j]->force.y += fy;
             }
-
-            //printf("(%d, %d) -> fx: %e, fy: %e\n", i, j, fx, fy);
-
-            /*
-            // Newton's formula on x
-            const double distX = points[i]->position.x - points[j]->position.x;
-            const double distSqX = fmax(square(distX), 1e-12); // TODO make 1e-12 a constant
-            const double fx = (G * mass[i] * mass[j] / distSqX) * FRICTION;
-            force[i].x += (fx * sign(distX));
-            force[j].x -= (fx * sign(distX));
-
-            // Newton's formula on y
-            const double distY = points[i]->position.y - points[j]->position.y;
-            const double distSqY = fmax(square(distY), 1e-12); // TODO make 1e-12 a constant
-            const double fy = (G * mass[i] * mass[j] / distSqY) * FRICTION;
-            force[i].y += (fy * sign(distY));
-            force[j].y -= (fy * sign(distY));
-            */
         }
 
         void computeForceOnBody(const int i) {
@@ -169,10 +153,12 @@ class Simulation {
         }
 
         void update() {
-            // TODO may be simplified to do just k iterations of "detect-and-resolve"
             //while(detectAndResolveCollisions()) {}
-            for(int i=0; i<1; i++) {
-                detectAndResolveCollisions();
+            // TODO: if you do too many iterations, some body will be pushed outside the domain borders
+            for(int i=0; i<10; i++) {
+                if(!detectAndResolveCollisions()) {
+                    break;
+                }
             }
 
             // compute forces

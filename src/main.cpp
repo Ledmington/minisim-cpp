@@ -10,7 +10,7 @@
 const double width = 700;
 const double height = 700;
 
-const unsigned int nParticles = 10;
+const unsigned int nParticles = 1000;
 
 const std::string currentDateTime() {
     time_t     now = time(0);
@@ -37,8 +37,8 @@ int main(void) {
         .nBodies(nParticles)
         .width(width)
         .height(height)
-        .gravity(Simulation::NEWTON_GRAVITY)
-        .friction(0.99)
+        .gravity(1e-6)
+        .friction(0.1)
         .solidBorders()
         .build());
 
@@ -47,8 +47,9 @@ int main(void) {
         log("Iteration " + std::to_string(i));
         sf::Event event;
         while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed)
+            if (event.type == sf::Event::Closed) {
                 window.close();
+            }
         }
         log("updating");
         sim.update();
@@ -57,7 +58,6 @@ int main(void) {
         sim.render(&window);
         window.display();
 
-        
         std::cout << "pos: " << sim.bodies[0]->position.x << ", " << sim.bodies[0]->position.y << std::endl;
         std::cout << "speed: " << sim.bodies[0]->speed.x << ", " << sim.bodies[0]->speed.y << std::endl;
         std::cout << "acc: " << sim.bodies[0]->acc.x << ", " << sim.bodies[0]->acc.y << std::endl;
