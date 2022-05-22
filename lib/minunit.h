@@ -126,7 +126,7 @@ static void (*minunit_teardown)(void) = NULL;
 	if (minunit_status) {\
 		minunit_fail++;\
 		printf("F");\
-		printf("\n%s\n", minunit_last_message);\
+		printf("\n\n%s\n", minunit_last_message);\
 	}\
 	printf("\n");\
 	fflush(stdout);\
