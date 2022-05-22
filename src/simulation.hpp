@@ -79,25 +79,12 @@ class Simulation {
         }
 
         void computeForceBetweenBodies(Body *first, Body *second) {
-            const double distanceXSquared = fmax(square(first->position.x - second->position.x), 1e-6);
-            const double fx = friction_constant * gravitational_constant * first->mass * second->mass / distanceXSquared;
-            if(first->position.x < second->position.x) {
-                first->force.x += fx;
-                second->force.x -= fx;
-            } else {
-                first->force.x -= fx;
-                second->force.x += fx;
-            }
-
-            const double distanceYSquared = fmax(square(first->position.y - second->position.y), 1e-6);
-            const double fy = friction_constant * gravitational_constant * first->mass * second->mass / distanceYSquared;
-            if(first->position.y < second->position.y) {
-                first->force.y += fy;
-                second->force.y -= fy;
-            } else {
-                first->force.y -= fy;
-                second->force.y += fy;
-            }
+            // vector pointing first (but centered in origin)
+            V2 diff = first->position.sub(second->position);
+            const double distance = first->dist(second);
+            const double force = friction_constant * gravitational_constant * first->mass * second->mass / square(distance);
+            first->force -= (diff * force);
+            second->force += (diff * force);
         }
 
         void computeForceOnBody(const int i) {

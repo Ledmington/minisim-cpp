@@ -37,8 +37,8 @@ int main(void) {
         .nBodies(nParticles)
         .width(width)
         .height(height)
-        .gravity(1e-6)
-        .friction(0.1)
+        .gravity(1e-4)
+        .friction(0.99)
         .solidBorders()
         .build());
 
