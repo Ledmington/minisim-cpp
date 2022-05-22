@@ -37,9 +37,10 @@ int main(void) {
         .nBodies(nParticles)
         .width(width)
         .height(height)
+        .gravity(Simulation::NEWTON_GRAVITY)
+        .friction(0.99)
         .solidBorders()
         .build());
-    std::cout << "created simulation" << std::endl;
 
     int i = 0;
     while (window.isOpen()) {

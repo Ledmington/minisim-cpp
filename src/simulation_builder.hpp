@@ -9,6 +9,8 @@ class SimulationBuilder {
         int n = 0;
         int w;
         int h;
+        double g;
+        double f;
 
         typedef enum {
             SOLID,
@@ -31,6 +33,16 @@ class SimulationBuilder {
 
         SimulationBuilder height(const int height) {
             h = height;
+            return *this;
+        }
+
+        SimulationBuilder gravity(const double gravity) {
+            g = gravity;
+            return *this;
+        }
+
+        SimulationBuilder friction(const double friction) {
+            f = friction;
             return *this;
         }
 
@@ -65,7 +77,7 @@ class SimulationBuilder {
                     break;
                 }
             }
-            return new Simulation(n, b);
+            return new Simulation(n, b, g, f);
         }
 };
 

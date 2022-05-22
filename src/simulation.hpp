@@ -12,11 +12,6 @@
 #include "body.hpp"
 #include "borders.hpp"
 
-const double G = 1e-5;
-const double FRICTION = 0.9;
-//const double DT = 1e-8;
-//const double EPS = 1e-6; // TODO remove if unused
-
 double randab(const double a, const double b) {
     return static_cast<double> (rand()) / static_cast<double> (RAND_MAX) * (b-a) + a;
 }
@@ -34,26 +29,31 @@ double square(const double x) {
 class Simulation {
     public:
 
+        static constexpr double NEWTON_GRAVITY = 6.6743e-11;
+
         std::vector<Body*> bodies = std::vector<Body*>();
         Borders *bounds;
+        double gravitational_constant;
+        double friction_constant;
 
-        Simulation(const int n, Borders *b) {
+        Simulation(const int n, Borders *b, const double G, const double friction) {
             assert(n >= 0);
             assert(b);
+            assert(G > 0);
+            assert(friction > 0 && friction <= 1);
             bounds = b;
             for(int i=0; i<n; i++) {
                 Body *b = new Body(
                     V2(randab(0, bounds->w), randab(0, bounds->h)),
                     V2(0, 0),
                     1,
-                    10
+                    1
                 );
                 bodies.push_back(b);
             }
+            gravitational_constant = G;
+            friction_constant = friction;
         }
-
-        // Creates an empty simulation
-        Simulation(Borders *bounds) : Simulation(0, bounds) {}
 
         ~Simulation() {
             delete bounds;
@@ -80,7 +80,7 @@ class Simulation {
 
         void computeForceBetweenBodies(const int i, const int j) {
             const double distanceSquared = fmax(square(bodies[i]->position.x - bodies[j]->position.x), 1e-6);
-            const double fx = G * bodies[i]->mass * bodies[j]->mass / distanceSquared;
+            const double fx = gravitational_constant * bodies[i]->mass * bodies[j]->mass / distanceSquared;
             const double fy = 1 / fmax(square(bodies[i]->position.y - bodies[j]->position.y), 1e-12);
             if(bodies[i]->position.x < bodies[j]->position.x) {
                 bodies[i]->force.x += fx;

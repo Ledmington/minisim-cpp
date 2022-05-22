@@ -14,6 +14,8 @@ static void init() {
     sim = SimulationBuilder()
         .width(100)
         .height(100)
+        .gravity(1e-8)
+        .friction(0.99)
         .solidBorders()
         .build();
 }
