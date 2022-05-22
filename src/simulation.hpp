@@ -1,5 +1,4 @@
-#ifndef SIMULATION_HPP
-#define SIMULATION_HPP
+#pragma once
 
 #include <SFML/Graphics.hpp>
 
@@ -194,5 +193,3 @@ class Simulation {
             }
         }
 };
-
-#endif // SIMULATION_HPP

@@ -1,5 +1,4 @@
-#ifndef SIM_BUILDER_TEST_HPP
-#define SIM_BUILDER_TEST_HPP
+#pragma once
 
 #include "../lib/minunit.h"
 
@@ -40,5 +39,3 @@ MU_TEST_SUITE(sim_builder_test) {
 	MU_RUN_TEST(no_bodies_if_not_specified);
     MU_RUN_TEST(correct_number_of_bodies);
 }
-
-#endif // SIM_BUILDER_TEST_HPP

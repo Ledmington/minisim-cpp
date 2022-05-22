@@ -1,5 +1,4 @@
-#ifndef V2_TEST_HPP
-#define V2_TEST_HPP
+#pragma once
 
 #include "../lib/minunit.h"
 
@@ -191,5 +190,3 @@ MU_TEST_SUITE(v2_test) {
     MU_RUN_TEST(plus_equal);
     MU_RUN_TEST(minus_equal);
 }
-
-#endif // V2_TEST_HPP

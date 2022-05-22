@@ -1,5 +1,4 @@
-#ifndef BODY_HPP
-#define BODY_HPP
+#pragma once
 
 #include <cmath>
 #include <SFML/Graphics.hpp>
@@ -46,5 +45,3 @@ class Body {
             //return dist(other) < Rsum; <-- correct way
         }
 };
-
-#endif // BODY_HPP

@@ -1,5 +1,4 @@
-#ifndef BORDERS_TEST_HPP
-#define BORDERS_TEST_HPP
+#pragma once
 
 #include "../lib/minunit.h"
 
@@ -93,5 +92,3 @@ MU_TEST_SUITE(borders_test) {
     MU_RUN_TEST(bottom_right_corner_cyclic);
     MU_RUN_TEST(top_left_corner_cyclic);
 }
-
-#endif // BORDERS_TEST_HPP

@@ -1,5 +1,4 @@
-#ifndef SIM_BUILDER_HPP
-#define SIM_BUILDER_HPP
+#pragma once
 
 #include "simulation.hpp"
 #include "borders.hpp"
@@ -80,5 +79,3 @@ class SimulationBuilder {
             return new Simulation(n, b, g, f);
         }
 };
-
-#endif // SIM_BUILDER_HPP

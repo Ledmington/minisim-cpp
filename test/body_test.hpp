@@ -1,5 +1,4 @@
-#ifndef BODY_TEST_HPP
-#define BODY_TEST_HPP
+#pragma once
 
 #include "../lib/minunit.h"
 
@@ -34,5 +33,3 @@ MU_TEST_SUITE(body_test) {
     MU_RUN_TEST(two_body_collision);
     MU_RUN_TEST(two_body_no_collision);
 }
-
-#endif // BODY_TEST_HPP

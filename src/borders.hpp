@@ -1,5 +1,4 @@
-#ifndef BORDERS_HPP
-#define BORDERS_HPP
+#pragma once
 
 #include "body.hpp"
 
@@ -55,5 +54,3 @@ class SolidBorders : public Borders {
             }
         }
 };
-
-#endif // BORDERS_HPP

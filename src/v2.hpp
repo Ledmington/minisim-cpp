@@ -1,5 +1,4 @@
-#ifndef V2_HPP
-#define V2_HPP
+#pragma once
 
 #include <cmath>
 #include <cassert>
@@ -87,5 +86,3 @@ class V2 {
             return "V2(" + std::to_string(x) + ", " + std::to_string(y) + ")";
         }
 };
-
-#endif // V2_HPP

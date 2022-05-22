@@ -1,5 +1,4 @@
-#ifndef SIMULATION_TEST_HPP
-#define SIMULATION_TEST_HPP
+#pragma once
 
 #include "../lib/minunit.h"
 
@@ -109,5 +108,3 @@ MU_TEST_SUITE(simulation_test) {
     MU_RUN_TEST(can_resolve_collisions_different_masses);
     MU_RUN_TEST(can_resolve_collisions_different_radii);
 }
-
-#endif // SIMULATION_TEST_HPP
