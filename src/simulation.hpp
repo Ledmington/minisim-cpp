@@ -7,6 +7,7 @@
 #include <cmath>
 #include <cassert>
 #include <vector>
+#include <iostream>
 
 #include "body.hpp"
 #include "borders.hpp"
@@ -133,9 +134,11 @@ class Simulation {
             for(unsigned int i=0; i<n; i++) {
                 Body *first = bodies[i];
                 for(unsigned int j=i+1; j<n; j++) {
+                    std::cout << "checking bodies " << i << " and " << j << std::endl;
                     Body *second = bodies[j];
 
                     if(first->collidesWith(second)) {
+                        std::cout << "collision" << std::endl;
                         // we have found a collision
                         foundCollisions = true;
 
@@ -144,7 +147,7 @@ class Simulation {
                         V2 spos = diff.norm();
 
                         /*
-                            Computing the magnitude of the movementas the result of this system.
+                            Computing the magnitude of the movement as result of this system.
                             R1 = a + b;
                             R2 = b + c;
                             compenetration = a + b + c
@@ -158,11 +161,15 @@ class Simulation {
                             b = R2 - compenetration - R1
                               = (b+c) - (a+b+c) - (a+b)
                         */
-                       const double compenetration = diff.mod();
-                       const double b = second->radius - compenetration - first->radius;
+                        const double compenetration = diff.mod();
+                        const double b = second->radius - compenetration - first->radius;
 
-                       first->position += spos * (b/2);
-                       second->position -= spos * (b/2);
+                        std::cout << "diff: " << diff.to_string() << std::endl;
+                        std::cout << "spos: " << spos.to_string() << std::endl;
+                        std::cout << "b: " << b << std::endl;
+
+                        first->position += spos * (b/2);
+                        second->position -= spos * (b/2);
 
                         /*
                         const double distsq = diff.dot(diff);

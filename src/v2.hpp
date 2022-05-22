@@ -3,6 +3,7 @@
 
 #include <cmath>
 #include <cassert>
+#include <string>
 
 // A class representing a 2D vector
 class V2 {
@@ -79,6 +80,10 @@ class V2 {
         void operator-=(V2 other) {
             x -= other.x;
             y -= other.y;
+        }
+
+        std::string to_string() {
+            return "V2(" + std::to_string(x) + ", " + std::to_string(y) + ")";
         }
 };
 
