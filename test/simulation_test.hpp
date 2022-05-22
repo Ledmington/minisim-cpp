@@ -75,6 +75,28 @@ MU_TEST(can_resolve_collisions) {
     assert_v2_eq(sim->bodies[1]->position, V2(2.5, 2));
 }
 
+MU_TEST(can_resolve_collisions_different_masses) {
+    // this test is a copy-paste of "can_resolve_collisions" because mass
+    // must not interfere with collisions
+    sim->addBody(new Body(V2(1,2), V2(0,0), 2, 1));
+    sim->addBody(new Body(V2(2,2), V2(0,0), 3, 1));
+    mu_check(sim->detectAndResolveCollisions());
+    mu_check(!sim->detectAndResolveCollisions());
+    assert_v2_eq(sim->bodies[0]->position, V2(0.5, 2));
+    assert_v2_eq(sim->bodies[1]->position, V2(2.5, 2));
+}
+
+MU_TEST(can_resolve_collisions_different_radii) {
+    // this test is an adapted copy-paste of "can_resolve_collisions" because
+    // radii must not interfere with collisions
+    sim->addBody(new Body(V2(4,4), V2(0,0), 1, 2));
+    sim->addBody(new Body(V2(5,4), V2(0,0), 1, 3));
+    mu_check(sim->detectAndResolveCollisions());
+    mu_check(!sim->detectAndResolveCollisions());
+    assert_v2_eq(sim->bodies[0]->position, V2(2, 4));
+    assert_v2_eq(sim->bodies[1]->position, V2(7, 4));
+}
+
 MU_TEST_SUITE(simulation_test) {
 	MU_SUITE_CONFIGURE(init, end);
 
@@ -82,6 +104,8 @@ MU_TEST_SUITE(simulation_test) {
     MU_RUN_TEST(can_detect_collisions);
     MU_RUN_TEST(no_collisions);
     MU_RUN_TEST(can_resolve_collisions);
+    MU_RUN_TEST(can_resolve_collisions_different_masses);
+    MU_RUN_TEST(can_resolve_collisions_different_radii);
 }
 
 #endif // SIMULATION_TEST_HPP

@@ -142,7 +142,7 @@ class Simulation {
 
                         // vector pointing first (but centered in origin)
                         V2 diff = first->position.sub(second->position);
-                        V2 spos = diff.norm();
+                        //V2 spos = diff.norm();
 
                         /*
                             Computing the magnitude of the movement as result of this system.
@@ -156,14 +156,14 @@ class Simulation {
                             b can be as high as min(R1, R2).
 
                             The resulting formula is
-                            b = R2 - compenetration - R1
-                              = (b+c) - (a+b+c) - (a+b)
+                            b = R1 + R2 - compenetration
+                              = (a+b) + (b+c) - (a+b+c)
                         */
                         const double compenetration = diff.mod();
-                        const double b = second->radius - compenetration - first->radius;
+                        const double b = first->radius + second->radius - compenetration;
 
-                        first->position -= (spos * (b/2));
-                        second->position += (spos * (b/2));
+                        first->position += (diff * (b/2));
+                        second->position -= (diff * (b/2));
 
                         /*
                         const double distsq = diff.dot(diff);
