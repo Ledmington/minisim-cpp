@@ -7,7 +7,6 @@
 #include <cmath>
 #include <cassert>
 #include <vector>
-#include <iostream>
 
 #include "body.hpp"
 #include "borders.hpp"
@@ -63,15 +62,8 @@ class Simulation {
             }
         }
 
-        Simulation addBody(Body *b) {
-            std::cout << "addBody" << std::endl;
-            std::cout << "size: " << bodies.size() << std::endl;
-            std::cout << b->mass << std::endl;
-            std::cout << b->radius << std::endl;
-            std::cout << b->position.x << ", " << b->position.y << std::endl;
+        void addBody(Body *b) {
             bodies.push_back(b);
-            std::cout << "size: " << bodies.size() << std::endl;
-            return *this;
         }
 
         void update_point(const int i) {

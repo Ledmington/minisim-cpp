@@ -7,12 +7,9 @@
 #include "../src/simulation.hpp"
 #include "../src/simulation_builder.hpp"
 
-#include <iostream>
-
 Simulation *sim;
 
 static void init() {
-    std::cout << "init" << std::endl;
     sim = SimulationBuilder()
         .width(100)
         .height(100)
@@ -33,12 +30,10 @@ MU_TEST(two_bodies) {
     const float left = 20;
     const float right = 30;
 
-    std::cout << "Creating bodies" << std::endl;
     Body *first = new Body(V2(left, down), V2(0, 0), 1, 1);
     Body *second = new Body(V2(right, up), V2(0, 0), 1, 1);
 
     sim->addBody(first);
-    std::cout << "second" << std::endl;
     sim->addBody(second);
 
     for(int i=0; i<1000; i++) {
