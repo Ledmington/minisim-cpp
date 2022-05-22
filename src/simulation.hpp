@@ -73,37 +73,37 @@ class Simulation {
             b->speed += b->acc;
             b->position += b->speed;
             
-            b->force = V2(0, 0);
+            b->force.x = b->force.y = 0.0f;
             
             bounds->apply(b);
         }
 
-        void computeForceBetweenBodies(const int i, const int j) {
-            const double distanceXSquared = fmax(square(bodies[i]->position.x - bodies[j]->position.x), 1e-6);
-            const double fx = friction_constant * gravitational_constant * bodies[i]->mass * bodies[j]->mass / distanceXSquared;
-            if(bodies[i]->position.x < bodies[j]->position.x) {
-                bodies[i]->force.x += fx;
-                bodies[j]->force.x -= fx;
+        void computeForceBetweenBodies(Body *first, Body *second) {
+            const double distanceXSquared = fmax(square(first->position.x - second->position.x), 1e-6);
+            const double fx = friction_constant * gravitational_constant * first->mass * second->mass / distanceXSquared;
+            if(first->position.x < second->position.x) {
+                first->force.x += fx;
+                second->force.x -= fx;
             } else {
-                bodies[i]->force.x -= fx;
-                bodies[j]->force.x += fx;
+                first->force.x -= fx;
+                second->force.x += fx;
             }
 
-            const double distanceYSquared = fmax(square(bodies[i]->position.y - bodies[j]->position.y), 1e-6);
-            const double fy = friction_constant * gravitational_constant * bodies[i]->mass * bodies[j]->mass / distanceYSquared;
-            if(bodies[i]->position.y < bodies[j]->position.y) {
-                bodies[i]->force.y += fy;
-                bodies[j]->force.y -= fy;
+            const double distanceYSquared = fmax(square(first->position.y - second->position.y), 1e-6);
+            const double fy = friction_constant * gravitational_constant * first->mass * second->mass / distanceYSquared;
+            if(first->position.y < second->position.y) {
+                first->force.y += fy;
+                second->force.y -= fy;
             } else {
-                bodies[i]->force.y -= fy;
-                bodies[j]->force.y += fy;
+                first->force.y -= fy;
+                second->force.y += fy;
             }
         }
 
         void computeForceOnBody(const int i) {
             const unsigned int n = bodies.size();
             for(unsigned int j=i+1; j<n; j++) {
-                computeForceBetweenBodies(i, j);
+                computeForceBetweenBodies(bodies[i], bodies[j]);
             }
         }
 
