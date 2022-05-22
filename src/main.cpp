@@ -58,17 +58,7 @@ int main(void) {
         sim.render(&window);
         window.display();
 
-        std::cout << "pos: " << sim.bodies[0]->position.x << ", " << sim.bodies[0]->position.y << std::endl;
-        std::cout << "speed: " << sim.bodies[0]->speed.x << ", " << sim.bodies[0]->speed.y << std::endl;
-        std::cout << "acc: " << sim.bodies[0]->acc.x << ", " << sim.bodies[0]->acc.y << std::endl;
-        std::cout << "force: " << sim.bodies[0]->force.x << ", " << sim.bodies[0]->force.y << std::endl;
-        std::cout << "-----" << std::endl;
-
         i++;
-        /*
-        if(i%1000 == 0) {
-            log(i + " iterations done\n");
-        }*/
     }
 
     return 0;
