@@ -134,11 +134,9 @@ class Simulation {
             for(unsigned int i=0; i<n; i++) {
                 Body *first = bodies[i];
                 for(unsigned int j=i+1; j<n; j++) {
-                    std::cout << "checking bodies " << i << " and " << j << std::endl;
                     Body *second = bodies[j];
 
                     if(first->collidesWith(second)) {
-                        std::cout << "collision" << std::endl;
                         // we have found a collision
                         foundCollisions = true;
 
@@ -164,12 +162,8 @@ class Simulation {
                         const double compenetration = diff.mod();
                         const double b = second->radius - compenetration - first->radius;
 
-                        std::cout << "diff: " << diff.to_string() << std::endl;
-                        std::cout << "spos: " << spos.to_string() << std::endl;
-                        std::cout << "b: " << b << std::endl;
-
-                        first->position += spos * (b/2);
-                        second->position -= spos * (b/2);
+                        first->position -= (spos * (b/2));
+                        second->position += (spos * (b/2));
 
                         /*
                         const double distsq = diff.dot(diff);

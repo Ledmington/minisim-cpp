@@ -6,6 +6,7 @@
 #include <SFML/Graphics.hpp>
 #include "../src/simulation.hpp"
 #include "../src/simulation_builder.hpp"
+#include "test_utils.hpp"
 
 Simulation *sim;
 
@@ -54,24 +55,24 @@ MU_TEST(two_bodies) {
 }
 
 MU_TEST(can_detect_collisions) {
-    sim->addBody(new Body(V2(0,0), V2(0,0), 1, 1));
     sim->addBody(new Body(V2(1,1), V2(0,0), 1, 1));
+    sim->addBody(new Body(V2(2,2), V2(0,0), 1, 1));
     mu_check(sim->detectAndResolveCollisions());
 }
 
 MU_TEST(no_collisions) {
-    sim->addBody(new Body(V2(0,0), V2(0,0), 1, 1));
-    sim->addBody(new Body(V2(2,2), V2(0,0), 1, 1));
+    sim->addBody(new Body(V2(1,1), V2(0,0), 1, 1));
+    sim->addBody(new Body(V2(3,3), V2(0,0), 1, 1));
     mu_check(!sim->detectAndResolveCollisions());
 }
 
 MU_TEST(can_resolve_collisions) {
-    sim->addBody(new Body(V2(0,0), V2(0,0), 1, 1));
-    sim->addBody(new Body(V2(1,0), V2(0,0), 1, 1));
+    sim->addBody(new Body(V2(1,2), V2(0,0), 1, 1));
+    sim->addBody(new Body(V2(2,2), V2(0,0), 1, 1));
     mu_check(sim->detectAndResolveCollisions());
     mu_check(!sim->detectAndResolveCollisions());
-    mu_check(sim->bodies[0]->position.x < 0);
-    mu_check(sim->bodies[1]->position.x > 1);
+    assert_v2_eq(sim->bodies[0]->position, V2(0.5, 2));
+    assert_v2_eq(sim->bodies[1]->position, V2(2.5, 2));
 }
 
 MU_TEST_SUITE(simulation_test) {
