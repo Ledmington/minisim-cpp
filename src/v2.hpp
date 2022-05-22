@@ -43,6 +43,7 @@ class V2 {
         // returns the normalized vector
         V2 norm() {
             const double m = mod();
+            assert(m != 0);
             return V2(x/m, y/m);
         }
 

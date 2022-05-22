@@ -78,13 +78,6 @@ MU_TEST(normal_dot) {
     mu_assert_double_eq(v.dot(w), 8);
 }
 
-MU_TEST(norm_of_origin_is_origin) {
-    V2 v = V2();
-    V2 n = v.norm();
-    mu_assert_double_eq(n.x, 0);
-    mu_assert_double_eq(n.y, 0);
-}
-
 MU_TEST(vector_norm) {
     V2 v = V2(0, 2);
     V2 n = v.norm();
@@ -183,7 +176,6 @@ MU_TEST_SUITE(v2_test) {
     MU_RUN_TEST(simple_modulo);
     MU_RUN_TEST(dot_with_origin_is_zero);
     MU_RUN_TEST(normal_dot);
-    MU_RUN_TEST(norm_of_origin_is_origin);
     MU_RUN_TEST(vector_norm);
     MU_RUN_TEST(normalized_vector_modulo_is_one);
     MU_RUN_TEST(distance_from_origin_is_vector_modulo);
