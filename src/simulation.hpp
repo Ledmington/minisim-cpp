@@ -142,7 +142,6 @@ class Simulation {
 
                         // vector pointing first (but centered in origin)
                         V2 diff = first->position.sub(second->position);
-                        //V2 spos = diff.norm();
 
                         /*
                             Computing the magnitude of the movement as result of this system.
@@ -164,16 +163,6 @@ class Simulation {
 
                         first->position += (diff * (b/2));
                         second->position -= (diff * (b/2));
-
-                        /*
-                        const double distsq = diff.dot(diff);
-                        const double Rsum = first->radius + second->radius;
-                        if (distsq < Rsum*Rsum - EPS) {
-                            const double dist = sqrt(distsq);
-                            const Vec3 force = vmul(vmul(diff, 1/dist), (Rsum - dist)*KAPPA);
-                            s->F = vsub(s->F, force);
-                            other->F = vadd(other->F, force);
-                        }*/
                     }
                 }
             }
