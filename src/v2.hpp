@@ -82,6 +82,11 @@ class V2 {
             y -= other.y;
         }
 
+        void operator*=(const double k) {
+            x *= k;
+            y *= k;
+        }
+
         std::string to_string() {
             return "V2(" + std::to_string(x) + ", " + std::to_string(y) + ")";
         }
