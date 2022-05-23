@@ -12,8 +12,8 @@ MU_TEST(no_bodies_if_not_specified) {
     Simulation *sim = SimulationBuilder()
         .width(100)
         .height(100)
-        .gravity(1e-10)
-        .friction(0.99)
+        .addForce(Gravity(1e-10))
+        .addForce(Friction(0.99))
         .solidBorders()
         .build();
     mu_check(sim->bodies.size() == 0);
@@ -25,8 +25,8 @@ MU_TEST(correct_number_of_bodies) {
         .nBodies(2)
         .width(100)
         .height(100)
-        .gravity(1e-10)
-        .friction(0.99)
+        .addForce(Gravity(1e-10))
+        .addForce(Friction(0.99))
         .solidBorders()
         .build();
     mu_check(sim->bodies.size() == 2);

@@ -1,15 +1,16 @@
 #pragma once
 
+#include <vector>
+
 #include "simulation.hpp"
 #include "borders.hpp"
 
 class SimulationBuilder {
     private:
-        int n = 0;
-        int w;
-        int h;
-        double g;
-        double f;
+        unsigned int n = 0;
+        int w = -1;
+        int h = -1;
+        std::vector<Force> forces = std::vector<Force>();
 
         typedef enum {
             SOLID,
@@ -20,7 +21,7 @@ class SimulationBuilder {
     public:
         SimulationBuilder() {}
 
-        SimulationBuilder nBodies(const int x) {
+        SimulationBuilder nBodies(const unsigned int x) {
             n = x;
             return *this;
         }
@@ -35,13 +36,8 @@ class SimulationBuilder {
             return *this;
         }
 
-        SimulationBuilder gravity(const double gravity) {
-            g = gravity;
-            return *this;
-        }
-
-        SimulationBuilder friction(const double friction) {
-            f = friction;
+        SimulationBuilder addForce(const Force f) {
+            forces.push_back(f);
             return *this;
         }
 
@@ -76,6 +72,6 @@ class SimulationBuilder {
                     break;
                 }
             }
-            return new Simulation(n, b, g, f);
+            return new Simulation(n, b, &forces);
         }
 };

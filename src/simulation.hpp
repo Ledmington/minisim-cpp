@@ -10,6 +10,7 @@
 
 #include "body.hpp"
 #include "borders.hpp"
+#include "force.hpp"
 
 double randab(const double a, const double b) {
     return static_cast<double> (rand()) / static_cast<double> (RAND_MAX) * (b-a) + a;
@@ -21,25 +22,16 @@ double sign(const double x) {
     return 0;
 }
 
-double square(const double x) {
-    return x*x;
-}
-
 class Simulation {
     public:
 
-        static constexpr double NEWTON_GRAVITY = 6.6743e-11;
-
         std::vector<Body*> bodies = std::vector<Body*>();
         Borders *bounds;
-        double gravitational_constant;
-        double friction_constant;
+        std::vector<Force> *forces;
 
-        Simulation(const int n, Borders *b, const double G, const double friction) {
+        Simulation(const int n, Borders *b, std::vector<Force> *forces) {
             assert(n >= 0);
             assert(b);
-            assert(G > 0);
-            assert(friction > 0 && friction <= 1);
             bounds = b;
             for(int i=0; i<n; i++) {
                 Body *b = new Body(
@@ -51,8 +43,7 @@ class Simulation {
                 );
                 bodies.push_back(b);
             }
-            gravitational_constant = G;
-            friction_constant = friction;
+            this->forces = forces;
         }
 
         ~Simulation() {
@@ -76,22 +67,6 @@ class Simulation {
             b->force.x = b->force.y = 0.0f;
             
             bounds->apply(b);
-        }
-
-        void computeForceBetweenBodies(Body *first, Body *second) {
-            // vector pointing first (but centered in origin)
-            V2 diff = first->position.sub(second->position);
-            const double distance = first->dist(second);
-            const double force = friction_constant * gravitational_constant * first->mass * second->mass / square(distance);
-            first->force -= (diff * force);
-            second->force += (diff * force);
-        }
-
-        void computeForceOnBody(const int i) {
-            const unsigned int n = bodies.size();
-            for(unsigned int j=i+1; j<n; j++) {
-                computeForceBetweenBodies(bodies[i], bodies[j]);
-            }
         }
 
         /*
@@ -149,8 +124,9 @@ class Simulation {
             }
 
             // compute forces
-            for(unsigned int i=0; i<bodies.size(); i++) {
-                computeForceOnBody(i);
+            for(unsigned int i=0; i<forces->size(); i++) {
+                //forces->get(i).apply(bodies); // TODO find a way around this uglyness
+                forces->at(i).apply(bodies);
             }
 
             // apply forces
